@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maratona di Milano 2026</title>
+<style>
+  body {
+    background: #0b0c10;
+    color: #e8e8ec;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    margin: 0;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+    color: #e8a020;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: #6b7080;
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+  }
+
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .pill {
+    background: #13151a;
+    border: 1px solid #1f2230;
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 0.8rem;
+    color: #9090a0;
+  }
+
+  .pill b { color: #e8a020; }
+
+  /* Pulsanti mappa */
+  .btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .btn-map {
+    display: inline-block;
+    padding: 9px 20px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: bold;
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: opacity 0.2s;
+  }
+
+  .btn-map:active { opacity: 0.7; }
+
+  .btn-percorso {
+    background: #e8a020;
+    color: #000;
+    border: 2px solid #e8a020;
+  }
+
+  .btn-eventi {
+    background: transparent;
+    color: #e8a020;
+    border: 2px solid #e8a020;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  .leg {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: #6b7080;
+  }
+
+  .dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .d1 { background: #2c4a2c; }
+  .d2 { background: #4a1a1a; }
+  .d3 { background: #1a1a3a; }
+
+  .tbl-wrap {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid #1f2230;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 520px;
+  }
+
+  thead tr {
+    background: #0f1117;
+    border-bottom: 2px solid #e8a020;
+  }
+
+  thead th {
+    padding: 12px 10px;
+    text-align: left;
+    font-size: 0.78rem;
+    color: #e8a020;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  thead th:first-child { text-align: center; width: 46px; }
+
+  tbody tr { border-bottom: 1px solid #1a1c24; }
+  tbody tr:last-child { border-bottom: none; }
+
+  tbody tr.r1 { background: rgba(30,55,30,0.3); }
+  tbody tr.r2 { background: rgba(55,20,20,0.3); }
+  tbody tr.rs { background: rgba(20,30,80,0.4); }
+  tbody tr.rf {
+    background: linear-gradient(90deg, rgba(232,160,32,0.07), rgba(232,160,32,0.18), rgba(232,160,32,0.07));
+    border-top: 2px solid #e8a020;
+    border-bottom: 2px solid #e8a020;
+  }
+
+  td {
+    padding: 8px 10px;
+    font-size: 0.82rem;
+    vertical-align: middle;
+  }
+
+  td:first-child {
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #7080a0;
+  }
+
+  .km-sp { color: #aaaaff; font-weight: bold; }
+  .km-fn { color: #e8a020; font-weight: bold; }
+
+  .orario { font-weight: bold; font-size: 0.95rem; color: #ffffff; }
+
+  .badge {
+    display: inline-block;
+    border-radius: 10px;
+    padding: 1px 7px;
+    font-size: 0.68rem;
+    font-weight: bold;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+
+  .b1 { background: rgba(232,160,32,0.15); color: #e8a020;  border: 1px solid rgba(232,160,32,0.4); }
+  .b2 { background: rgba(232,64,64,0.15);  color: #e84040;  border: 1px solid rgba(232,64,64,0.4); }
+  .b3 { background: rgba(160,80,220,0.18); color: #c070ff;  border: 1px solid rgba(160,80,220,0.5); }
+
+  .zona { color: #b0b8cc; font-size: 0.78rem; }
+  .nota { color: #6b7080; font-style: italic; font-size: 0.75rem; }
+
+  footer {
+    text-align: center;
+    margin-top: 20px;
+    color: #4a5060;
+    font-size: 0.72rem;
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+
+<h1>Maratona di Milano 2026</h1>
+<div class="subtitle">Tabella di gara — 42,195 km</div>
+
+<div class="pills">
+  <div class="pill">Partenza <b>08:45</b></div>
+  <div class="pill">Passo 1ª metà <b>6:00 min/km</b></div>
+  <div class="pill">Passo 2ª metà <b>~6:30–7:30 min/km</b></div>
+</div>
+
+<div class="btn-row">
+  <a class="btn-map btn-percorso" href="https://www.milanomarathon.it/wp-content/uploads/2026/03/mappa-percorso-MM26-light-scaled.jpg" target="_blank">🗺️ Guarda Mappa</a>
+  <a class="btn-map btn-eventi" href="https://www.milanomarathon.it/wp-content/uploads/2026/04/mappa-punti-tifo-con-legenda-mm26-scaled.jpg" target="_blank">🎉 Guarda Eventi</a>
+</div>
+
+<div class="legend">
+  <div class="leg"><div class="dot d1"></div> Prima metà (km 1–21)</div>
+  <div class="leg"><div class="dot d2"></div> Seconda metà (km 22–42)</div>
+  <div class="leg"><div class="dot d3"></div> Tappe speciali</div>
+</div>
+
+<div class="tbl-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>KM</th>
+        <th>Ora Approssimata</th>
+        <th>Zona / Landmark</th>
+        <th>Note</th>
+        <th>Passo</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<footer>
+  Stanchezza simulata: +5 sec/km ogni 3 km dalla mezza maratona in poi.<br>
+  Percorso ufficiale Wizz Air Milano Marathon 2026 &bull; In bocca al lupo! 🏃‍♀️
+</footer>
+
+<script>
+var START = 8 * 60 + 45;
+
+function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+function fmtTime(tot) {
+  var h = Math.floor(tot / 60);
+  var m = Math.floor(tot % 60);
+  var s = Math.round((tot - Math.floor(tot)) * 60);
+  if (s === 60) { s = 0; m++; }
+  if (m === 60) { m = 0; h++; }
+  return pad(h) + ':' + pad(m) + ':' + pad(s);
+}
+
+function fmtPace(p) {
+  var m = Math.floor(p);
+  var s = Math.round((p - m) * 60);
+  if (s === 60) { s = 0; m++; }
+  return m + ':' + pad(s) + ' /km';
+}
+
+var locs = [
+  '',
+  'Corso Sempione (partenza)',
+  'Cenisio',
+  'Cimitero Monumentale',
+  'Porta Garibaldi',
+  'Repubblica - Giardini Montanelli',
+  'Porta Venezia',
+  'Piazza Tricolore',
+  'Porta Romana',
+  'Crocetta',
+  'Porta Genova',
+  'Sant Agostino',
+  'Conciliazione',
+  'Pagano',
+  'Amendola',
+  'City Life - Domodossola',
+  'Portello',
+  'QT8 - Monte Stella',
+  'Monte Stella',
+  'Ippodromo - Lampugnano',
+  'Ippodromo - QT8',
+  'Ippodromo - Lotto',
+  'Zona Lorenteggio',
+  'San Siro - Via Achille',
+  'San Siro - Fermata M5',
+  'Parco Trenno - Via Bellaria',
+  'Parco Trenno - Via Gorlini',
+  'Parco Trenno - Bonola',
+  'Parco Trenno - Via Lampugnano',
+  'Uruguay - Via Croce',
+  'Uruguay - Via Uruguay',
+  'Via Uruguay',
+  'Via Gallarate',
+  'Piazzale Accursio',
+  'Portello Parco',
+  'City Life - Portello',
+  'Domodossola M5',
+  'Sempione - Arco della Pace',
+  'Castello Sforzesco',
+  'Moscova',
+  'Turati',
+  'San Babila',
+  'Piazza del Duomo'
+];
+
+var notes = {
+  1:  'Si parte! 💪',
+  8:  'Qui ci sará family di Daksha',
+  21: '🏅 Mezza Maratona!',
+  42: '🏁 FINISH LINE!'
+};
+
+var tbody = document.getElementById('tbody');
+var cum = 0;
+
+for (var km = 1; km <= 42; km++) {
+  var pace;
+  if (km <= 21) {
+    pace = 6.0;
+  } else {
+    var over = km - 21;
+    var steps = Math.floor(over / 3);
+    pace = 6.0 + 0.5 + (steps * 5) / 60;
+    if (pace > 7.5) pace = 7.5;
+  }
+
+  cum += pace;
+  var arr = START + cum;
+  var tr = document.createElement('tr');
+
+  var cls;
+  if (km === 42) {
+    cls = 'rf';
+  } else if (km === 1 || km === 21) {
+    cls = 'rs';
+  } else if (km <= 21) {
+    cls = 'r1';
+  } else {
+    cls = 'r2';
+  }
+  tr.className = cls;
+
+  var kmCell;
+  if (km === 42) {
+    kmCell = '<span class="km-fn">' + km + '</span>';
+  } else if (km === 21) {
+    kmCell = '<span class="km-sp">' + km + '</span>';
+  } else {
+    kmCell = km;
+  }
+
+  var badge;
+  if (km >= 35) {
+    badge = '<span class="badge b3">sbatti</span>';
+  } else if (km <= 21) {
+    badge = '<span class="badge b1">regolare</span>';
+  } else {
+    badge = '<span class="badge b2">fatica</span>';
+  }
+
+  var loc  = locs[km] || '';
+  var note = notes[km] || '';
+
+  tr.innerHTML =
+    '<td>' + kmCell + '</td>' +
+    '<td><span class="orario">' + fmtTime(arr) + '</span></td>' +
+    '<td class="zona">' + loc + '</td>' +
+    '<td class="nota">' + note + '</td>' +
+    '<td>' + fmtPace(pace) + badge + '</td>';
+
+  tbody.appendChild(tr);
+}
+</script>
+</body>
+</html>
